@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload to GitHub (Test Only)</title>
+</head>
+<body>
+  <h1>Upload a File to GitHub</h1>
+  <input type="file" id="fileInput" />
+  <button onclick="uploadToGitHub()">Upload</button>
+
+  <script>
+    async function uploadToGitHub() {
+      const file = document.getElementById('fileInput').files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function () {
+        const content = btoa(reader.result); // base64 encode
+
+        const response = await fetch("https://api.github.com/repos/USERNAME/REPO/contents/" + file.name, {
+          method: "PUT",
+          headers: {
+            "Authorization": "token YOUR_GITHUB_TOKEN",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "Upload via HTML",
+            content: content
+          })
+        });
+
+        const data = await response.json();
+        console.log(data);
+        alert("Uploaded!");
+      };
+
+      reader.readAsBinaryString(file);
+    }
+  </script>
+</body>
+</html>
