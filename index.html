@@ -1,105 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Upload/Download to GitHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rounded Box</title>
+    <style>
+        body {
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Ensure full viewport height */
+            margin: 0; /* Remove default body margin */
+            background-color: #f0f0f0; /* Optional: Light grey background for the page */
+        }
+
+        .rounded-box {
+            background-color: lightblue;
+            border-radius: 5%; /* 5% rounded corners */
+            padding: 20px; /* Add some padding inside the box */
+            width: 600px; /* Set a width for the box */
+            height: 600px; /* Set a height for the box */
+            text-align: center; /* Center the text inside the box*/
+        }
+    </style>
 </head>
 <body>
-  <h1>Upload a File to GitHub</h1>
-
-  <!-- Input for GitHub Token -->
-  <label for="tokenInput">Enter GitHub Token:</label>
-  <input type="password" id="tokenInput" placeholder="Enter GitHub Token" /><br /><br />
-
-  <!-- File Input for Upload -->
-  <label for="fileInput">Select File to Upload:</label>
-  <input type="file" id="fileInput" /><br /><br />
-
-  <!-- Button to trigger upload -->
-  <button onclick="uploadFile()">Upload</button>
-
-  <hr />
-
-  <h1>Download a File from GitHub</h1>
-
-  <!-- Input for GitHub File URL for Download -->
-  <label for="fileUrl">Enter File URL:</label>
-  <input type="text" id="fileUrl" placeholder="GitHub file URL" /><br /><br />
-
-  <!-- Button to trigger download -->
-  <button onclick="downloadFile()">Download</button>
-
-  <script>
-    async function uploadFile() {
-      const token = document.getElementById("tokenInput").value.trim();
-      const file = document.getElementById("fileInput").files[0];
-
-      if (!token || !file) {
-        alert("❌ Missing token or file.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = async function () {
-        const content = btoa(reader.result); // Base64 encode
-
-        const url = `https://api.github.com/repos/{owner}/{repo}/contents/${file.name}`;
-
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: `Upload ${file.name}`,
-            content: content
-          })
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          alert(`✅ File uploaded successfully!`);
-        } else {
-          alert(`❌ Upload failed: ${result.message}`);
-          console.error(result);
-        }
-      };
-
-      reader.readAsBinaryString(file);
-    }
-
-    async function downloadFile() {
-      const token = document.getElementById("tokenInput").value.trim();
-      const fileUrl = document.getElementById("fileUrl").value.trim();
-
-      if (!token || !fileUrl) {
-        alert("❌ Missing token or file URL.");
-        return;
-      }
-
-      const response = await fetch(fileUrl, {
-        headers: {
-          "Authorization": `token ${token}`,
-        }
-      });
-
-      if (response.ok) {
-        const fileBlob = await response.blob();
-        const fileName = fileUrl.split('/').pop(); // Extract file name from URL
-
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(fileBlob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        alert("✅ File downloaded successfully!");
-      } else {
-        alert("❌ Download failed.");
-      }
-    }
-  </script>
+    <div class="rounded-box">
+        This is a rounded box!
+    </div>
 </body>
 </html>
